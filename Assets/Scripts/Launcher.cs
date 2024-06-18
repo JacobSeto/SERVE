@@ -11,6 +11,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 {
     public bool offline;
 
+    private string adminID;
     public static Launcher Instance;
     private static Dictionary<string, RoomInfo> cachedRoomList = new Dictionary<string, RoomInfo>();
 
@@ -65,11 +66,13 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void CreateRoom()
     {
-        if (roomNameInputField.text.Length > 0)
+        if (roomNameInputField.text.Length > 0 && PhotonNetwork.LocalPlayer.UserId == adminID)
         {
             print("creating room");
             PhotonNetwork.CreateRoom(roomNameInputField.text);
             MenuManager.Instance.OpenMenu("loading");
+        } else {
+            print("not admin");
         }
     }
 
@@ -79,6 +82,11 @@ public class Launcher : MonoBehaviourPunCallbacks
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
 
         Player[] players = PhotonNetwork.PlayerList;
+
+//the players userID
+        for(int i = 0; i < players.Length; i++){
+            print(players[i].UserId);
+        }
 
         foreach (Transform child in playerListContent)
         {
