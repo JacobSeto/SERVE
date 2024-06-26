@@ -10,10 +10,12 @@ public class UsernameManager : MonoBehaviour
 
     private void Start()
     {
+        print("changing username");
         if (PlayerPrefs.HasKey("username"))
         {
             usernameInput.text = PlayerPrefs.GetString("username");
             PhotonNetwork.NickName = usernameInput.text;
+             OnUsernameInputValueChange();
         }
         else
         {
@@ -26,5 +28,19 @@ public class UsernameManager : MonoBehaviour
     {
         PhotonNetwork.NickName = usernameInput.text;
         PlayerPrefs.SetString("username", usernameInput.text);
+        PlayerPrefs.Save();
+        // print(PhotonNetwork.NickName);
     }
+
+    void Update()
+    {
+        OnUsernameInputValueChange();
+        // print("updating");
+    //     if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+    //     {
+    //         print("updating");
+    //         OnUsernameInputValueChange();
+    //     }
+    }
+
 }
