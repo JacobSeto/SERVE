@@ -23,9 +23,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] Transform playerListContent;
     [SerializeField] GameObject roomListPrefab;
     [SerializeField] GameObject playerListPrefab;
-    [SerializeField] GameObject gamemodeButtons;
-    [Space]
-    int gameIndex;
+    [SerializeField] GameObject startButtons;
 
     void Awake()
     {
@@ -83,7 +81,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (roomNameInputField.text.Length > 0 && PhotonNetwork.LocalPlayer.NickName == adminID)
         {
             print("creating room");
-            PhotonNetwork.CreateRoom(roomNameInputField.text);
+            PhotonNetwork.CreateRoom(roomNameInputField.text, new RoomOptions { IsVisible = true });
             MenuManager.Instance.OpenMenu("loading");
         } else {
             print(PhotonNetwork.LocalPlayer.NickName);
@@ -112,12 +110,12 @@ public class Launcher : MonoBehaviourPunCallbacks
             Instantiate(playerListPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
         }
 
-        gamemodeButtons.SetActive(PhotonNetwork.IsMasterClient);
+        startButtons.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
-        gamemodeButtons.SetActive(PhotonNetwork.IsMasterClient);
+        startButtons.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
