@@ -11,10 +11,11 @@ public class Launcher : MonoBehaviourPunCallbacks
 {
     public bool offline;
 
-    private string adminID;
+    private string adminID = "admin";
     public static Launcher Instance;
     private static Dictionary<string, RoomInfo> cachedRoomList = new Dictionary<string, RoomInfo>();
 
+    [SerializeField] TMP_InputField UsernameInputField;
     [SerializeField] TMP_InputField roomNameInputField;
     [SerializeField] TMP_Text errorText;
     [SerializeField] TMP_Text roomNameText;
@@ -31,6 +32,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         Instance = this;
     }
 
+    // public void SaveUsername(){
+    //     PhotonNetwork.LocalPlayer.NickName = UsernameInputField.text;
+    //     PlayerPrefs.SetString("Username", UsernameInputField.text);
+    // }
     public void StartLauncher(bool isOffline)
     {
         offline = isOffline;
@@ -42,6 +47,9 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
         else
         {
+        // PhotonNetwork.LocalPlayer.NickName = UsernameInputField.text;
+        // PlayerPrefs.SetString("Nickname", UsernameInputField.text);
+        // PlayerPrefs.Save();
             PhotonNetwork.ConnectUsingSettings();
         }
     }
@@ -55,24 +63,30 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
         else
         {
+        //             PhotonNetwork.LocalPlayer.NickName = UsernameInputField.text;
+        // PlayerPrefs.SetString("Nickname", UsernameInputField.text);
+        // PlayerPrefs.Save();
             PhotonNetwork.JoinLobby();
         }
     }
 
     public override void OnJoinedLobby()
     {
+        // PhotonNetwork.LocalPlayer.NickName = UsernameInputField.text;
+        // PlayerPrefs.SetString("Nickname", UsernameInputField.text);
+        // PlayerPrefs.Save();
         MenuManager.Instance.OpenMenu("title");
     }
 
     public void CreateRoom()
     {
-        if (roomNameInputField.text.Length > 0 && PhotonNetwork.LocalPlayer.UserId == adminID)
+        if (roomNameInputField.text.Length > 0 && PhotonNetwork.LocalPlayer.NickName == adminID)
         {
             print("creating room");
             PhotonNetwork.CreateRoom(roomNameInputField.text);
             MenuManager.Instance.OpenMenu("loading");
         } else {
-            print("not admin");
+            print(PhotonNetwork.LocalPlayer.NickName);
         }
     }
 
